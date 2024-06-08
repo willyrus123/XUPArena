@@ -5,10 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XUPArena</title>
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .logo-left, .logo-right {
+      position: absolute;
+      top: 10px;
+    }
+
+    .logo-left {
+      left: 10px;
+    }
+
+    .logo-right {
+      right: 10px;
+    }
+
+    .logo {
+      height: 100px; /* Increased from 50px to 100px for twice the size */
+    }
+
+    header {
+      position: relative;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <header>
+    <img src="assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-left logo">
     <h1>XUPArena</h1>
+    <img src="assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-right logo">
     <nav>
       <a href="index.html">Home</a>
       <a href="pages/wallet.html">Wallet</a>
@@ -19,7 +49,7 @@
   </header>
   <div class="container">
     <h1>Welcome to XUPArena</h1>
-    <button id="connectButton">Connect Wallet</button>
+    <button id="connectButton">Connect Crossmark Wallet</button>
     <p>Address: <span id="userAddress"></span></p>
     <h2>Bettable Events</h2>
     <div class="events">
@@ -28,6 +58,7 @@
           <tr>
             <th>Category</th>
             <th>Teams</th>
+            <th>Odds</th>
             <th>Date</th>
             <th>Bet</th>
           </tr>
@@ -52,12 +83,31 @@
         row.innerHTML = `
           <td>${event.category}</td>
           <td>${event.teamA} vs ${event.teamB}</td>
+          <td>${event.odds}</td>
           <td>${event.date}</td>
           <td><button onclick="location.href='pages/bet.html?teamA=${event.teamA}&teamB=${event.teamB}'">Bet</button></td>
         `;
         eventsTableBody.appendChild(row);
       });
     }
+
+    async function connectCrossmarkWallet() {
+      if (typeof window.crossmark !== 'undefined') {
+        try {
+          const accounts = await window.crossmark.request({ method: 'eth_requestAccounts' });
+          const userAddress = accounts[0];
+          document.getElementById('userAddress').textContent = userAddress;
+          alert('Connected to Crossmark wallet successfully!');
+        } catch (error) {
+          console.error('Error connecting to Crossmark wallet:', error);
+          alert('Failed to connect to Crossmark wallet.');
+        }
+      } else {
+        alert('Crossmark is not installed. Please install it to use this app.');
+      }
+    }
+
+    document.getElementById('connectButton').addEventListener('click', connectCrossmarkWallet);
 
     document.addEventListener('DOMContentLoaded', () => {
       loadEvents();

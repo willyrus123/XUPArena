@@ -5,10 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wallet - XUPArena</title>
   <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .logo-left, .logo-right {
+      position: absolute;
+      top: 10px;
+    }
+
+    .logo-left {
+      left: 10px;
+    }
+
+    .logo-right {
+      right: 10px;
+    }
+
+    .logo {
+      height: 100px; /* Increased from 50px to 100px for twice the size */
+    }
+
+    header {
+      position: relative;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <header>
+    <img src="../assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-left logo">
     <h1>XUPArena</h1>
+    <img src="../assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-right logo">
     <nav>
       <a href="../index.html">Home</a>
       <a href="wallet.html">Wallet</a>
@@ -19,12 +49,14 @@
   </header>
   <div class="container">
     <h1>Deposit XRP</h1>
-    <input type="text" placeholder="Amount in XRP">
-    <select>
-      <option>Select</option>
-      <option>Deposit</option>
-      <option>Withdraw</option>
-    </select>
+    <form id="walletForm">
+      <input type="number" id="amount" placeholder="Amount in XRP" required>
+      <select id="action">
+        <option value="deposit">Deposit</option>
+        <option value="withdraw">Withdraw</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
     <h2>Account Detail</h2>
     <table>
       <thead>
@@ -38,14 +70,68 @@
       </thead>
       <tbody>
         <tr>
-          <td>102000</td>
-          <td>0</td>
-          <td>80000</td>
-          <td>0</td>
-          <td>23000</td>
+          <td id="depositedAmount">0</td>
+          <td id="balanceLost">0</td>
+          <td id="balanceAvailable">0</td>
+          <td id="balanceWithdrawn">0</td>
+          <td id="ongoingBetAmount">0</td>
         </tr>
       </tbody>
     </table>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAccountDetails();
+    });
+
+    function loadAccountDetails() {
+      const account = JSON.parse(localStorage.getItem('account')) || {
+        depositedAmount: 0,
+        balanceLost: 0,
+        balanceAvailable: 0,
+        balanceWithdrawn: 0,
+        ongoingBetAmount: 0
+      };
+
+      document.getElementById('depositedAmount').textContent = account.depositedAmount;
+      document.getElementById('balanceLost').textContent = account.balanceLost;
+      document.getElementById('balanceAvailable').textContent = account.balanceAvailable;
+      document.getElementById('balanceWithdrawn').textContent = account.balanceWithdrawn;
+      document.getElementById('ongoingBetAmount').textContent = account.ongoingBetAmount;
+    }
+
+    document.getElementById('walletForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const action = document.getElementById('action').value;
+
+      let account = JSON.parse(localStorage.getItem('account')) || {
+        depositedAmount: 0,
+        balanceLost: 0,
+        balanceAvailable: 0,
+        balanceWithdrawn: 0,
+        ongoingBetAmount: 0
+      };
+
+      if (action === 'deposit') {
+        account.depositedAmount += amount;
+        account.balanceAvailable += amount;
+      } else if (action === 'withdraw') {
+        if (amount <= account.balanceAvailable) {
+          account.balanceAvailable -= amount;
+          account.balanceWithdrawn += amount;
+        } else {
+          alert('Insufficient balance to withdraw.');
+          return;
+        }
+      }
+
+      localStorage.setItem('account', JSON.stringify(account));
+      loadAccountDetails();
+      alert(`${action.charAt(0).toUpperCase() + action.slice(1)} successful!`);
+      document.getElementById('walletForm').reset();
+    });
+  </script>
 </body>
 </html>

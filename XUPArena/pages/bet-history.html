@@ -5,10 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bet History - XUPArena</title>
   <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .logo-left, .logo-right {
+      position: absolute;
+      top: 10px;
+    }
+
+    .logo-left {
+      left: 10px;
+    }
+
+    .logo-right {
+      right: 10px;
+    }
+
+    .logo {
+      height: 100px; /* Increased from 50px to 100px for twice the size */
+    }
+
+    header {
+      position: relative;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <header>
+    <img src="../assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-left logo">
     <h1>XUPArena</h1>
+    <img src="../assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-right logo">
     <nav>
       <a href="../index.html">Home</a>
       <a href="wallet.html">Wallet</a>
@@ -22,11 +52,12 @@
     <table id="betHistoryTable">
       <thead>
         <tr>
-          <th>Type</th>
-          <th>Team</th>
-          <th>Token</th>
-          <th>Amount</th>
+          <th>Category</th>
+          <th>Teams</th>
+          <th>Odds</th>
           <th>Date</th>
+          <th>Amount</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -38,18 +69,19 @@
   <script>
     function loadBetHistory() {
       const betHistoryTableBody = document.querySelector('#betHistoryTable tbody');
-      const betHistory = JSON.parse(localStorage.getItem('betHistory')) || [];
+      const bets = JSON.parse(localStorage.getItem('bets')) || [];
 
       betHistoryTableBody.innerHTML = '';
 
-      betHistory.forEach(bet => {
+      bets.forEach(bet => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${bet.type}</td>
-          <td>${bet.team}</td>
-          <td>${bet.token || 'N/A'}</td>
-          <td>${bet.amount}</td>
+          <td>${bet.category}</td>
+          <td>${bet.teamA}</td>
+          <td>${bet.odds}</td>
           <td>${bet.date}</td>
+          <td>${bet.amount}</td>
+          <td>${bet.status}</td>
         `;
         betHistoryTableBody.appendChild(row);
       });

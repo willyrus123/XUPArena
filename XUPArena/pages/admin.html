@@ -5,10 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - XUPArena</title>
   <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .logo-left, .logo-right {
+      position: absolute;
+      top: 10px;
+    }
+
+    .logo-left {
+      left: 10px;
+    }
+
+    .logo-right {
+      right: 10px;
+    }
+
+    .logo {
+      height: 100px; /* Increased from 50px to 100px for twice the size */
+    }
+
+    header {
+      position: relative;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <header>
+    <img src="../assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-left logo">
     <h1>XUPArena</h1>
+    <img src="../assets/XUPArena1.jpeg" alt="XUPArena Logo" class="logo-right logo">
     <nav>
       <a href="../index.html">Home</a>
       <a href="wallet.html">Wallet</a>
@@ -36,6 +66,10 @@
         <div>
           <input type="text" id="teamBName" placeholder="Enter team B name" required>
           <label>Team B Name</label>
+        </div>
+        <div>
+          <input type="text" id="odds" placeholder="Enter odds" required>
+          <label>Odds</label>
         </div>
         <div>
           <input type="date" id="eventDate" required>
@@ -66,12 +100,14 @@
       const categoryName = document.getElementById('categoryName').value;
       const teamAName = document.getElementById('teamAName').value;
       const teamBName = document.getElementById('teamBName').value;
+      const odds = document.getElementById('odds').value;
       const eventDate = document.getElementById('eventDate').value;
 
       const newEvent = {
         category: categoryName,
         teamA: teamAName,
         teamB: teamBName,
+        odds: odds,
         date: eventDate
       };
 
