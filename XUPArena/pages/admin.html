@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - XUPArena</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>XUPArena</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="wallet.html">Wallet</a>
+      <a href="store.html">Store</a>
+      <a href="bet-history.html">Bet History</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+  <div class="container">
+    <button onclick="showAddEventForm()">Add Event</button>
+    <button onclick="declareWinner()">Declare Winner</button>
+    <button onclick="registerToken()">Register Token</button>
+
+    <div id="addEventForm" style="display: none; margin-top: 20px;">
+      <h2>Add Event</h2>
+      <form id="eventForm">
+        <div>
+          <input type="text" id="categoryName" placeholder="Enter category name" required>
+          <label>Category Name</label>
+        </div>
+        <div>
+          <input type="text" id="teamAName" placeholder="Enter team A name" required>
+          <label>Team A Name</label>
+        </div>
+        <div>
+          <input type="text" id="teamBName" placeholder="Enter team B name" required>
+          <label>Team B Name</label>
+        </div>
+        <div>
+          <input type="date" id="eventDate" required>
+          <label>Date</label>
+        </div>
+        <button type="submit">Add</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function showAddEventForm() {
+      document.getElementById('addEventForm').style.display = 'block';
+    }
+
+    function declareWinner() {
+      alert('Declare Winner button clicked!');
+      // Declare winner logic here
+    }
+
+    function registerToken() {
+      alert('Register Token button clicked!');
+      // Register token logic here
+    }
+
+    document.getElementById('eventForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const categoryName = document.getElementById('categoryName').value;
+      const teamAName = document.getElementById('teamAName').value;
+      const teamBName = document.getElementById('teamBName').value;
+      const eventDate = document.getElementById('eventDate').value;
+
+      const newEvent = {
+        category: categoryName,
+        teamA: teamAName,
+        teamB: teamBName,
+        date: eventDate
+      };
+
+      let events = JSON.parse(localStorage.getItem('events')) || [];
+      events.push(newEvent);
+      localStorage.setItem('events', JSON.stringify(events));
+
+      alert('Event added successfully!');
+      document.getElementById('eventForm').reset();
+      document.getElementById('addEventForm').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bet - XUPArena</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>XUPArena</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="wallet.html">Wallet</a>
+      <a href="store.html">Store</a>
+      <a href="bet-history.html">Bet History</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+  <div class="container">
+    <h1>Bet</h1>
+    <form id="betForm">
+      <div>
+        <label for="teamSelect">Select Team:</label>
+        <select id="teamSelect"></select>
+      </div>
+      <div>
+        <label for="betAmount">Enter Amount:</label>
+        <input type="number" id="betAmount" placeholder="Enter Amount" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    <h1>FlashBet</h1>
+    <form id="flashBetForm">
+      <div>
+        <label for="flashTeamSelect">Select Team:</label>
+        <select id="flashTeamSelect"></select>
+      </div>
+      <div>
+        <label for="tokenSelect">Select Token:</label>
+        <select id="tokenSelect">
+          <option value="DAI">DAI</option>
+          <option value="XRP">XRP</option>
+          <!-- Add more tokens if necessary -->
+        </select>
+      </div>
+      <div>
+        <label for="flashBetAmount">Enter Amount:</label>
+        <input type="number" id="flashBetAmount" placeholder="Enter Amount" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const teamA = urlParams.get('teamA');
+      const teamB = urlParams.get('teamB');
+
+      const teamSelect = document.getElementById('teamSelect');
+      const flashTeamSelect = document.getElementById('flashTeamSelect');
+
+      if (teamA && teamB) {
+        const optionA = document.createElement('option');
+        optionA.value = teamA;
+        optionA.textContent = teamA;
+
+        const optionB = document.createElement('option');
+        optionB.value = teamB;
+        optionB.textContent = teamB;
+
+        teamSelect.appendChild(optionA);
+        teamSelect.appendChild(optionB);
+
+        flashTeamSelect.appendChild(optionA.cloneNode(true));
+        flashTeamSelect.appendChild(optionB.cloneNode(true));
+      }
+    });
+
+    document.getElementById('betForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const team = document.getElementById('teamSelect').value;
+      const amount = document.getElementById('betAmount').value;
+
+      const newBet = {
+        type: 'Bet',
+        team: team,
+        amount: amount,
+        date: new Date().toLocaleString()
+      };
+
+      let betHistory = JSON.parse(localStorage.getItem('betHistory')) || [];
+      betHistory.push(newBet);
+      localStorage.setItem('betHistory', JSON.stringify(betHistory));
+
+      alert('Bet placed successfully!');
+    });
+
+    document.getElementById('flashBetForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const team = document.getElementById('flashTeamSelect').value;
+      const token = document.getElementById('tokenSelect').value;
+      const amount = document.getElementById('flashBetAmount').value;
+
+      const newBet = {
+        type: 'FlashBet',
+        team: team,
+        token: token,
+        amount: amount,
+        date: new Date().toLocaleString()
+      };
+
+      let betHistory = JSON.parse(localStorage.getItem('betHistory')) || [];
+      betHistory.push(newBet);
+      localStorage.setItem('betHistory', JSON.stringify(betHistory));
+
+      alert('FlashBet placed successfully!');
+    });
+  </script>
+</body>
+</html>

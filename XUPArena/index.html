@@ -4,102 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XUPArena</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      text-align: center;
-    }
-    header {
-      background-color: #333;
-      color: #fff;
-      padding: 10px 0;
-      text-align: center;
-    }
-    header nav a {
-      color: #fff;
-      margin: 0 15px;
-      text-decoration: none;
-    }
-    .container {
-      padding: 20px;
-    }
-    .container h1 {
-      font-size: 2em;
-    }
-    .container button {
-      padding: 10px 20px;
-      font-size: 1em;
-    }
-    .events {
-      margin-top: 20px;
-    }
-    .events table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    .events table, .events th, .events td {
-      border: 1px solid #ddd;
-    }
-    .events th, .events td {
-      padding: 10px;
-      text-align: left;
-    }
-  </style>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header>
     <h1>XUPArena</h1>
     <nav>
-      <a href="#">Home</a>
-      <a href="#">Wallet</a>
-      <a href="#">Store</a>
-      <a href="#">Bet History</a>
-      <a href="#">Admin</a>
+      <a href="index.html">Home</a>
+      <a href="pages/wallet.html">Wallet</a>
+      <a href="pages/store.html">Store</a>
+      <a href="pages/bet-history.html">Bet History</a>
+      <a href="pages/admin.html">Admin</a>
     </nav>
   </header>
   <div class="container">
-    <h1>XUPArena</h1>
+    <h1>Welcome to XUPArena</h1>
     <button id="connectButton">Connect Wallet</button>
     <p>Address: <span id="userAddress"></span></p>
     <h2>Bettable Events</h2>
     <div class="events">
-      <table>
+      <table id="eventsTable">
         <thead>
           <tr>
             <th>Category</th>
             <th>Teams</th>
+            <th>Date</th>
             <th>Bet</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Example row, repeat as necessary -->
-          <tr>
-            <td>Sports</td>
-            <td>Team A vs Team B</td>
-            <td><button>Bet</button></td>
-          </tr>
+          <!-- Dynamic event rows will be inserted here -->
         </tbody>
       </table>
     </div>
   </div>
   
+  <script src="js/script.js"></script>
   <script>
-    document.getElementById('connectButton').addEventListener('click', async () => {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const userAddress = accounts[0];
-          document.getElementById('userAddress').innerText = userAddress;
-        } catch (error) {
-          console.error('User rejected the request');
-        }
-      } else {
-        alert('MetaMask is not installed. Please install it to use this app.');
-      }
+    function loadEvents() {
+      const eventsTableBody = document.querySelector('#eventsTable tbody');
+      const events = JSON.parse(localStorage.getItem('events')) || [];
+
+      eventsTableBody.innerHTML = '';
+
+      events.forEach(event => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${event.category}</td>
+          <td>${event.teamA} vs ${event.teamB}</td>
+          <td>${event.date}</td>
+          <td><button onclick="location.href='pages/bet.html?teamA=${event.teamA}&teamB=${event.teamB}'">Bet</button></td>
+        `;
+        eventsTableBody.appendChild(row);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadEvents();
     });
   </script>
 </body>
